@@ -19,7 +19,7 @@ jobs:
         if: github.repository == 'pmauduit/temp-gh-actions'
         id: version
         run: |
-         if [ github.ref == 'refs/headers/master']
+         if [ ${{ github.ref }} == 'refs/headers/master' ]
          then
             DOCKER_TAG=latest
          else
