@@ -19,10 +19,11 @@ jobs:
         if: github.repository == 'pmauduit/temp-gh-actions'
         id: version
         run: |
-         if [ github.ref == 'refs/headers/master'] ; then
-            DOCKER_TAG=latest ;
+         if [ github.ref == 'refs/headers/master']
+         then
+            DOCKER_TAG=latest
          else
-            DOCKER_TAG=$( echo ${{ github.ref }} | cut -d'/' -f3) ;
+            DOCKER_TAG=$( echo ${{ github.ref }} | cut -d'/' -f3)
          fi
          echo ::set-output name=VERSION::$DOCKER_TAG
       - name: "build the container"
