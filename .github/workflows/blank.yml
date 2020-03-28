@@ -18,21 +18,20 @@ jobs:
       - name: "Calculating the docker image tag"
         if: github.repository == 'pmauduit/temp-gh-actions'
         id: version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-
+        run: |
+         if [ github.ref == 'refs/headers/master'] ; then
+            echo ::set-output name=VERSION::latest ;
+         else
+            echo ::set-output name=VERSION::$( echo ${{ github.ref }} | cut -d'/' -f3') ;
+         fi
       - name: "build the container"
         if: github.repository == 'pmauduit/temp-gh-actions'
         run: |
           docker pull nginx:latest
           docker tag nginx:latest dudu/popo:${{ steps.version.outputs.VERSION }}
 
-      - name: "push the container (latest)"
-        if: github.repository == 'pmauduit/temp-gh-actions' && github.ref == 'refs/heads/master'
+      - name: "push the container"
+        if: github.repository == 'pmauduit/temp-gh-actions'
         run: |
-          docker tag dudu/popo:${{ steps.version.outputs.VERSION }} dudu/popo:latest
-          echo "will push dudu/popo:latest"
-      - name: "push the container (other branches)"
-        if: github.repository == 'pmauduit/temp-gh-actions' && github.ref != 'refs/heads/master'
-        run: |
-          echo "will push dudu/popo:${{ steps.version.outputs.VERSION }}"
+          echo "will push  dudu/popo:${{ steps.version.outputs.VERSION }}"
 
